@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Counsellor Portal - Add Enquiry</title>
+	
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	
+	<!-- Bootstrap 5.3.3 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+	
+	<!-- Custom Design System -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+
+<body>
+
+	<!-- Top Navigation Bar -->
+	<nav class="navbar navbar-expand-lg cp-navbar sticky-top">
+		<div class="container">
+			<a class="navbar-brand" href="dashboard">
+				<div class="brand-icon">
+					<i class="bi bi-mortarboard-fill"></i>
+				</div>
+				<span>Counsellor Portal</span>
+			</a>
+			
+			<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#cpNavbarContent"
+				aria-controls="cpNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="cpNavbarContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-1">
+					<li class="nav-item">
+						<a class="cp-nav-link" href="dashboard">
+							<i class="bi bi-grid-1x2"></i> Dashboard
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="cp-nav-link" href="view-enquiries">
+							<i class="bi bi-table"></i> Student Enquiries
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="cp-nav-link active" href="enquiry">
+							<i class="bi bi-person-plus-fill"></i> Add Enquiry
+						</a>
+					</li>
+				</ul>
+
+				<div class="d-flex align-items-center gap-2">
+					<a href="logout" class="cp-nav-link cp-nav-logout" title="Sign Out">
+						<i class="bi bi-box-arrow-right"></i> Logout
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Main Content Area -->
+	<main class="container py-4 py-lg-5">
+		
+		<!-- Page Header Hero -->
+		<div class="cp-page-header">
+			<div>
+				<h1 class="cp-page-title">
+					<i class="bi bi-pencil-square text-primary me-2"></i>
+					<span th:text="${enqDto.enqId == null ? 'Add Student Enquiry' : 'Edit Student Enquiry'}">Add Student Enquiry</span>
+				</h1>
+				<p class="cp-page-subtitle">Enter student requirements, preferred course, and tracking status.</p>
+			</div>
+			<div>
+				<a href="view-enquiries" class="btn btn-outline-secondary">
+					<i class="bi bi-arrow-left"></i> View All Enquiries
+				</a>
+			</div>
+		</div>
+
+		<!-- Notifications -->
+		<div th:if="${smsg}" class="cp-alert cp-alert-success" role="alert">
+			<i class="bi bi-check-circle-fill cp-alert-icon"></i>
+			<div class="d-flex flex-wrap align-items-center justify-content-between w-100 gap-2">
+				<div>
+					<strong>Success!</strong>
+					<p class="mb-0 small" th:text="${smsg}"></p>
+				</div>
+				<a href="view-enquiries" class="btn btn-sm btn-success">View in List &rarr;</a>
+			</div>
+		</div>
+
+		<div th:if="${emsg}" class="cp-alert cp-alert-danger" role="alert">
+			<i class="bi bi-exclamation-triangle-fill cp-alert-icon"></i>
+			<div>
+				<strong>Error Encountered</strong>
+				<p class="mb-0 small" th:text="${emsg}"></p>
+			</div>
+		</div>
+
+		<!-- Enquiry Form Card -->
+		<div class="row justify-content-center">
+			<div class="col-lg-10">
+				<div class="cp-card shadow-sm">
+					<div class="cp-card-header">
+						<h5 class="cp-card-title">
+							<i class="bi bi-card-checklist text-primary"></i>
+							Student Enquiry Details
+						</h5>
+						<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
+							<i class="bi bi-shield-check me-1"></i> Counsellor Entry
+						</span>
+					</div>
+
+					<div class="cp-card-body p-4 p-md-5">
+						<form th:action="@{/enquiry}" th:object="${enqDto}" method="post">
+							<!-- Hidden ID for update -->
+							<input type="hidden" th:field="*{enqId}">
+
+							<div class="row g-4">
+								<!-- Student Name -->
+								<div class="col-md-6">
+									<label class="cp-form-label" for="stuName">
+										<i class="bi bi-person"></i> Student Full Name <span class="text-danger">*</span>
+									</label>
+									<div class="cp-input-group">
+										<i class="bi bi-person cp-input-icon"></i>
+										<input type="text" id="stuName" th:field="*{stuName}" class="form-control"
+											placeholder="e.g. Rahul Sharma" required autocomplete="name">
+									</div>
+								</div>
+
+								<!-- Student Phone -->
+								<div class="col-md-6">
+									<label class="cp-form-label" for="stuPhno">
+										<i class="bi bi-telephone"></i> Contact Phone Number <span class="text-danger">*</span>
+									</label>
+									<div class="cp-input-group">
+										<i class="bi bi-telephone cp-input-icon"></i>
+										<input type="number" id="stuPhno" th:field="*{stuPhno}" class="form-control"
+											placeholder="e.g. 9876543210" required autocomplete="tel">
+									</div>
+								</div>
+
+								<!-- Training Mode -->
+								<div class="col-md-6">
+									<label class="cp-form-label" for="classMode">
+										<i class="bi bi-laptop"></i> Training Mode <span class="text-danger">*</span>
+									</label>
+									<div class="cp-input-group">
+										<i class="bi bi-laptop cp-input-icon"></i>
+										<select id="classMode" th:field="*{classMode}" class="form-select" required>
+											<option value="">-- Select Mode --</option>
+											<option value="Online">Online Training</option>
+											<option value="Classroom">Classroom Training</option>
+											<option value="Clasroom" style="display:none">Classroom Training</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Course Selection -->
+								<div class="col-md-6">
+									<label class="cp-form-label" for="courseId">
+										<i class="bi bi-book"></i> Target Course <span class="text-danger">*</span>
+									</label>
+									<div class="cp-input-group">
+										<i class="bi bi-book cp-input-icon"></i>
+										<select id="courseId" th:field="*{courseId}" class="form-select" required>
+											<option value="">-- Select Course --</option>
+											<option th:each="course : ${courses}" th:value="${course.courseId}"
+												th:text="${course.courseName}">
+											</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Enquiry Status -->
+								<div class="col-md-12">
+									<label class="cp-form-label" for="enqStatus">
+										<i class="bi bi-flag"></i> Enquiry Status <span class="text-danger">*</span>
+									</label>
+									<div class="cp-input-group">
+										<i class="bi bi-flag cp-input-icon"></i>
+										<select id="enqStatus" th:field="*{enqStatus}" class="form-select" required>
+											<option value="">-- Select Status --</option>
+											<option value="OPEN">Open (Under Discussion / Follow-up)</option>
+											<option value="ENROLLED">Enrolled (Course Registered)</option>
+											<option value="LOST">Lost (Declined / Not Interested)</option>
+										</select>
+									</div>
+									<div class="form-text text-muted small mt-1">
+										Status can be updated as the student progresses in the counseling funnel.
+									</div>
+								</div>
+							</div>
+
+							<!-- Form Action Buttons -->
+							<div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-5 pt-3 border-top">
+								<a href="view-enquiries" class="btn btn-outline-secondary">
+									<i class="bi bi-x-lg"></i> Cancel
+								</a>
+								<button type="reset" class="btn btn-outline-secondary">
+									<i class="bi bi-arrow-counterclockwise"></i> Reset
+								</button>
+								<button type="submit" class="btn btn-primary px-4">
+									<i class="bi bi-check2-circle"></i>
+									<span th:text="${enqDto.enqId == null ? 'Save Enquiry' : 'Update Enquiry'}">Save Enquiry</span>
+								</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+	<!-- Footer -->
+	<footer class="cp-footer">
+		<div class="container">
+			<p class="mb-0">&copy; Counsellor Portal. Empowering seamless student enrollment workflows.</p>
+		</div>
+	</footer>
+
+	<!-- Bootstrap Bundle JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

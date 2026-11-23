@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Counsellor Portal - Student Enquiries</title>
+	
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	
+	<!-- Bootstrap 5.3.3 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+	
+	<!-- Custom Design System -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+
+<body>
+
+	<!-- Top Navigation Bar -->
+	<nav class="navbar navbar-expand-lg cp-navbar sticky-top">
+		<div class="container">
+			<a class="navbar-brand" href="dashboard">
+				<div class="brand-icon">
+					<i class="bi bi-mortarboard-fill"></i>
+				</div>
+				<span>Counsellor Portal</span>
+			</a>
+			
+			<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#cpNavbarContent"
+				aria-controls="cpNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="cpNavbarContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-1">
+					<li class="nav-item">
+						<a class="cp-nav-link" href="dashboard">
+							<i class="bi bi-grid-1x2"></i> Dashboard
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="cp-nav-link active" href="view-enquiries">
+							<i class="bi bi-table"></i> Student Enquiries
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="cp-nav-link" href="enquiry">
+							<i class="bi bi-person-plus"></i> Add Enquiry
+						</a>
+					</li>
+				</ul>
+
+				<div class="d-flex align-items-center gap-2">
+					<a href="enquiry" class="btn btn-primary btn-sm d-none d-md-inline-flex">
+						<i class="bi bi-plus-lg"></i> New Enquiry
+					</a>
+					<a href="logout" class="cp-nav-link cp-nav-logout" title="Sign Out">
+						<i class="bi bi-box-arrow-right"></i> Logout
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Main Content Area -->
+	<main class="container py-4">
+		
+		<!-- Student Enquiries Header -->
+		<div class="cp-page-header">
+			<div>
+				<div class="d-flex align-items-center gap-2">
+					<h1 class="cp-page-title">
+						<i class="bi bi-person-lines-fill text-primary"></i>
+						<span>Student Enquiries</span>
+					</h1>
+					<span class="cp-record-badge">
+						<span class="cp-record-dot"></span>
+						<span th:text="${enqs != null ? (enqs.size() + (enqs.size() == 1 ? ' record' : ' records')) : '0 records'}">0 records</span>
+					</span>
+				</div>
+				<p class="cp-page-subtitle">Filter, search, monitor, and update the status of prospective student leads.</p>
+			</div>
+			
+			<div class="d-flex align-items-center gap-2 flex-wrap">
+				<!-- Quick Search Input -->
+				<div class="cp-input-group" style="min-width: 260px;">
+					<i class="bi bi-search cp-input-icon"></i>
+					<input type="text" id="liveSearchInput" class="form-control" placeholder="Quick search name or phone..."
+						onkeyup="filterStudentTable()">
+				</div>
+
+				<a href="enquiry" class="btn btn-primary">
+					<i class="bi bi-plus-lg"></i>
+					<span>Add New Enquiry</span>
+				</a>
+			</div>
+		</div>
+
+		<!-- Filter Section Card -->
+		<div class="cp-filter-bar">
+			<form th:action="@{/filter-enquiries}" th:object="${filter}" method="post">
+				<div class="row g-3 align-items-end">
+					
+					<!-- Training Mode Filter -->
+					<div class="col-12 col-sm-6 col-lg-3">
+						<label class="cp-filter-label" for="filterClassMode">
+							<i class="bi bi-laptop"></i> Training Mode
+						</label>
+						<select id="filterClassMode" th:field="*{classMode}" class="form-select">
+							<option value="">All Modes</option>
+							<option value="Online">Online</option>
+							<option value="Classroom">Classroom</option>
+							<option value="Clasroom" style="display:none">Classroom</option>
+						</select>
+					</div>
+
+					<!-- Course Filter -->
+					<div class="col-12 col-sm-6 col-lg-4">
+						<label class="cp-filter-label" for="filterCourse">
+							<i class="bi bi-book"></i> Course
+						</label>
+						<select id="filterCourse" th:field="*{courseId}" class="form-select">
+							<option value="">All Courses</option>
+							<option th:each="course : ${courses}" th:value="${course.courseId}"
+								th:text="${course.courseName}">
+							</option>
+						</select>
+					</div>
+
+					<!-- Enquiry Status Filter -->
+					<div class="col-12 col-sm-6 col-lg-3">
+						<label class="cp-filter-label" for="filterStatus">
+							<i class="bi bi-flag"></i> Enquiry Status
+						</label>
+						<select id="filterStatus" th:field="*{enqStatus}" class="form-select">
+							<option value="">All Statuses</option>
+							<option value="OPEN">Open</option>
+							<option value="ENROLLED">Enrolled</option>
+							<option value="LOST">Lost</option>
+						</select>
+					</div>
+
+					<!-- Filter & Reset Buttons -->
+					<div class="col-12 col-sm-6 col-lg-2">
+						<div class="d-flex align-items-center gap-2">
+							<button type="submit" class="btn btn-primary w-100" title="Apply Filter">
+								<i class="bi bi-funnel-fill"></i>
+								<span>Filter</span>
+							</button>
+							<a href="view-enquiries" class="btn btn-secondary cp-btn-reset" title="Reset Filters" aria-label="Reset Filters">
+								<i class="bi bi-arrow-counterclockwise"></i>
+							</a>
+						</div>
+					</div>
+
+				</div>
+			</form>
+		</div>
+
+		<!-- Student Enquiries Table Card -->
+		<div class="cp-table-card">
+			<div class="table-responsive">
+				<table class="cp-table" id="studentEnquiriesTable">
+					<thead>
+						<tr>
+							<th style="width: 50px;">#</th>
+							<th>Student Name</th>
+							<th>Contact Phone</th>
+							<th>Interested Course</th>
+							<th>Training Mode</th>
+							<th>Enquiry Date</th>
+							<th>Status</th>
+							<th class="text-end" style="width: 150px;">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="enq, loopCounter: ${enqs}" class="student-row">
+							<!-- # Column -->
+							<td>
+								<span class="text-muted fw-semibold small" th:text="${loopCounter.index + 1}">1</span>
+							</td>
+
+							<!-- Student Name (clickable to view profile) -->
+							<td class="student-name-col">
+								<div class="d-flex align-items-center gap-2">
+									<div class="rounded-circle bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center flex-shrink-0"
+										style="width: 32px; height: 32px; font-size: 0.85rem;">
+										<i class="bi bi-person-fill"></i>
+									</div>
+									<a href="javascript:void(0)" class="fw-semibold text-dark text-decoration-none student-profile-link"
+										th:data-id="${enq.enqId}"
+										th:data-name="${enq.stuName}"
+										th:data-phone="${enq.stuPhno}"
+										th:data-course="${enq.course != null ? enq.course.courseName : 'N/A'}"
+										th:data-mode="${enq.classMode}"
+										th:data-status="${enq.enqStatus}"
+										th:data-date="${enq.createdAt != null ? #temporals.format(enq.createdAt, 'dd MMM yyyy, hh:mm a') : 'Recently Added'}"
+										th:data-counsellor="${enq.counsellor != null ? enq.counsellor.name : 'Assigned Counsellor'}"
+										onclick="openStudentModal(this)"
+										title="View Student Profile">
+										<span th:text="${enq.stuName}">Rahul Sharma</span>
+									</a>
+								</div>
+							</td>
+
+							<!-- Contact Phone -->
+							<td class="student-phone-col">
+								<a th:href="'tel:' + ${enq.stuPhno}" class="text-decoration-none text-secondary">
+									<i class="bi bi-telephone text-muted me-1 small"></i>
+									<span th:text="${enq.stuPhno}">9876543210</span>
+								</a>
+							</td>
+
+							<!-- Course Name -->
+							<td>
+								<span class="fw-medium text-slate" th:text="${enq.course != null ? enq.course.courseName : 'N/A'}">Java Full Stack</span>
+							</td>
+
+							<!-- Training Mode -->
+							<td>
+								<span th:if="${enq.classMode == 'Online'}" class="cp-badge-mode cp-mode-online">
+									<i class="bi bi-laptop"></i> Online
+								</span>
+								<span th:if="${enq.classMode == 'Classroom' or enq.classMode == 'Clasroom'}"
+									class="cp-badge-mode cp-mode-classroom">
+									<i class="bi bi-building"></i> Classroom
+								</span>
+								<span th:if="${enq.classMode != 'Online' and enq.classMode != 'Classroom' and enq.classMode != 'Clasroom'}"
+									class="badge bg-light text-secondary border" th:text="${enq.classMode}">Other</span>
+							</td>
+
+							<!-- Enquiry Date -->
+							<td>
+								<span class="small text-muted"
+									th:text="${enq.createdAt != null ? #temporals.format(enq.createdAt, 'dd MMM yyyy') : 'Recently Added'}">
+									18 Nov 2026
+								</span>
+							</td>
+
+							<!-- Enquiry Status -->
+							<td>
+								<span th:if="${enq.enqStatus == 'OPEN'}" class="cp-status-badge cp-status-open">
+									<span class="cp-status-dot"></span> OPEN
+								</span>
+								<span th:if="${enq.enqStatus == 'ENROLLED'}" class="cp-status-badge cp-status-enrolled">
+									<span class="cp-status-dot"></span> ENROLLED
+								</span>
+								<span th:if="${enq.enqStatus == 'LOST'}" class="cp-status-badge cp-status-lost">
+									<span class="cp-status-dot"></span> LOST
+								</span>
+								<span th:if="${enq.enqStatus != 'OPEN' and enq.enqStatus != 'ENROLLED' and enq.enqStatus != 'LOST'}"
+									class="badge bg-light text-dark" th:text="${enq.enqStatus}">Unknown</span>
+							</td>
+
+							<!-- Actions -->
+							<td class="text-end">
+								<div class="d-inline-flex align-items-center gap-1">
+									<!-- View Button -->
+									<button type="button" class="btn cp-btn-view"
+										th:data-id="${enq.enqId}"
+										th:data-name="${enq.stuName}"
+										th:data-phone="${enq.stuPhno}"
+										th:data-course="${enq.course != null ? enq.course.courseName : 'N/A'}"
+										th:data-mode="${enq.classMode}"
+										th:data-status="${enq.enqStatus}"
+										th:data-date="${enq.createdAt != null ? #temporals.format(enq.createdAt, 'dd MMM yyyy, hh:mm a') : 'Recently Added'}"
+										th:data-counsellor="${enq.counsellor != null ? enq.counsellor.name : 'Assigned Counsellor'}"
+										onclick="openStudentModal(this)"
+										title="View Details">
+										<i class="bi bi-eye"></i>
+									</button>
+
+									<!-- Edit Button -->
+									<a th:href="@{'/editEnq?enqId=' + ${enq.enqId}}" class="btn cp-btn-edit" title="Edit Enquiry">
+										<i class="bi bi-pencil-square"></i>
+										<span>Edit</span>
+									</a>
+
+									<!-- Delete Button -->
+									<button type="button" class="btn cp-btn-delete"
+										th:data-id="${enq.enqId}"
+										th:data-name="${enq.stuName}"
+										onclick="confirmDelete(this)"
+										title="Delete Enquiry">
+										<i class="bi bi-trash3"></i>
+									</button>
+								</div>
+							</td>
+						</tr>
+
+						<!-- Empty State -->
+						<tr th:if="${enqs == null or enqs.size() == 0}" id="tableEmptyStateRow">
+							<td colspan="8">
+								<div class="cp-empty-state">
+									<div class="cp-empty-icon">
+										<i class="bi bi-inbox"></i>
+									</div>
+									<h4 class="cp-empty-title">No Enquiries Found</h4>
+									<p class="cp-empty-text">
+										There are no student enquiries recorded yet or no records match your selected filter criteria.
+									</p>
+									<div class="d-flex justify-content-center gap-2">
+										<a href="enquiry" class="btn btn-primary btn-sm">
+											<i class="bi bi-plus-lg"></i> Add New Enquiry
+										</a>
+										<a href="view-enquiries" class="btn btn-secondary btn-sm">
+											<i class="bi bi-arrow-counterclockwise"></i> Reset Filters
+										</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</main>
+
+	<!-- ===================================================================
+	     Student Details / Profile Modal (Real Counselling Workflow)
+	     =================================================================== -->
+	<div class="modal fade" id="studentDetailsModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content border-0 shadow-lg" style="border-radius: var(--cp-radius-lg); overflow: hidden;">
+				<div class="modal-header bg-light border-bottom px-4 py-3">
+					<div class="d-flex align-items-center gap-3">
+						<div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+							style="width: 44px; height: 44px; font-size: 1.25rem;">
+							<i class="bi bi-person-fill"></i>
+						</div>
+						<div>
+							<h5 class="modal-title fw-bold text-dark mb-0" id="modalStudentName">Student Profile</h5>
+							<span class="small text-muted" id="modalStudentPhone">Contact details</span>
+						</div>
+					</div>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<div class="modal-body p-4">
+					<div class="row g-4 mb-4">
+						<!-- Target Course -->
+						<div class="col-sm-6 col-md-4">
+							<div class="p-3 bg-light rounded-3 border">
+								<span class="small text-muted d-block mb-1"><i class="bi bi-book text-primary me-1"></i> Target Course</span>
+								<strong class="text-dark fs-6" id="modalStudentCourse">Java Full Stack</strong>
+							</div>
+						</div>
+
+						<!-- Training Mode -->
+						<div class="col-sm-6 col-md-4">
+							<div class="p-3 bg-light rounded-3 border">
+								<span class="small text-muted d-block mb-1"><i class="bi bi-laptop text-primary me-1"></i> Training Mode</span>
+								<strong class="text-dark fs-6" id="modalStudentMode">Classroom</strong>
+							</div>
+						</div>
+
+						<!-- Admission Status -->
+						<div class="col-sm-6 col-md-4">
+							<div class="p-3 bg-light rounded-3 border">
+								<span class="small text-muted d-block mb-1"><i class="bi bi-flag text-primary me-1"></i> Current Status</span>
+								<div id="modalStatusContainer">
+									<span class="cp-status-badge cp-status-open" id="modalStudentStatus">OPEN</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Counselling & Activity Details -->
+					<div class="row g-4">
+						<div class="col-md-6">
+							<h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle text-primary me-1"></i> Admission Information</h6>
+							<ul class="list-unstyled mb-0">
+								<li class="py-2 border-bottom d-flex justify-content-between">
+									<span class="text-muted small">Assigned Counsellor:</span>
+									<span class="fw-semibold small text-dark" id="modalCounsellor">Counsellor</span>
+								</li>
+								<li class="py-2 border-bottom d-flex justify-content-between">
+									<span class="text-muted small">Registered Date:</span>
+									<span class="fw-semibold small text-dark" id="modalEnquiryDate">Date</span>
+								</li>
+								<li class="py-2 border-bottom d-flex justify-content-between">
+									<span class="text-muted small">Next Action:</span>
+									<span class="badge bg-warning-subtle text-warning border px-2 py-1 small">Follow-up Call Scheduled</span>
+								</li>
+							</ul>
+						</div>
+
+						<div class="col-md-6">
+							<h6 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history text-primary me-1"></i> Activity Timeline</h6>
+							<div class="cp-timeline">
+								<div class="cp-timeline-item">
+									<div class="cp-timeline-dot"></div>
+									<div class="fw-semibold small text-dark">Initial Student Enquiry Logged</div>
+									<div class="small text-muted" id="timelineCreatedDate">Recorded in database</div>
+								</div>
+								<div class="cp-timeline-item">
+									<div class="cp-timeline-dot" style="background-color: var(--cp-success);"></div>
+									<div class="fw-semibold small text-dark">Assigned to Counselor Workspace</div>
+									<div class="small text-muted">Ready for phone outreach & course counselling</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer bg-light px-4 py-3 d-flex justify-content-between">
+					<a href="#" id="modalCallBtn" class="btn btn-outline-secondary">
+						<i class="bi bi-telephone text-success"></i> Call Student
+					</a>
+					<div class="d-flex gap-2">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<a href="#" id="modalEditBtn" class="btn btn-primary">
+							<i class="bi bi-pencil-square"></i> Edit Enquiry
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ===================================================================
+	     Delete Confirmation Modal
+	     =================================================================== -->
+	<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content border-0 shadow" style="border-radius: var(--cp-radius-lg);">
+				<div class="modal-body text-center p-4">
+					<div class="rounded-circle bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center mb-3"
+						style="width: 54px; height: 54px; font-size: 1.5rem;">
+						<i class="bi bi-exclamation-triangle-fill"></i>
+					</div>
+					<h5 class="fw-bold text-dark mb-2">Delete Enquiry?</h5>
+					<p class="text-muted small mb-4" id="deleteStudentMessage">
+						Are you sure you want to delete this enquiry? This action cannot be undone.
+					</p>
+					<div class="d-flex gap-2 justify-content-center">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+						<a href="#" id="confirmDeleteLink" class="btn btn-primary bg-danger border-danger">
+							<i class="bi bi-trash3"></i> Delete
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="cp-footer">
+		<div class="container">
+			<p class="mb-0">&copy; Counsellor Portal. Empowering seamless student admission & counselling workflows.</p>
+		</div>
+	</footer>
+
+	<!-- Bootstrap Bundle JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Interactive Client-side Script -->
+	<script>
+		// Live search filter in table
+		function filterStudentTable() {
+			const query = document.getElementById('liveSearchInput').value.toLowerCase().trim();
+			const rows = document.querySelectorAll('.student-row');
+			let visibleCount = 0;
+
+			rows.forEach(row => {
+				const name = row.querySelector('.student-name-col') ? row.querySelector('.student-name-col').textContent.toLowerCase() : '';
+				const phone = row.querySelector('.student-phone-col') ? row.querySelector('.student-phone-col').textContent.toLowerCase() : '';
+				
+				if (name.includes(query) || phone.includes(query)) {
+					row.style.display = '';
+					visibleCount++;
+				} else {
+					row.style.display = 'none';
+				}
+			});
+
+			const emptyState = document.getElementById('tableEmptyStateRow');
+			if (emptyState) {
+				emptyState.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+			}
+		}
+
+		// Open Student Details Modal
+		function openStudentModal(btn) {
+			const id = btn.getAttribute('data-id');
+			const name = btn.getAttribute('data-name');
+			const phone = btn.getAttribute('data-phone');
+			const course = btn.getAttribute('data-course');
+			const mode = btn.getAttribute('data-mode');
+			const status = btn.getAttribute('data-status');
+			const date = btn.getAttribute('data-date');
+			const counsellor = btn.getAttribute('data-counsellor');
+
+			document.getElementById('modalStudentName').textContent = name || 'Student Profile';
+			document.getElementById('modalStudentPhone').textContent = phone ? ('Contact: ' + phone) : '';
+			document.getElementById('modalStudentCourse').textContent = course || 'N/A';
+			document.getElementById('modalStudentMode').textContent = mode || 'N/A';
+			document.getElementById('modalCounsellor').textContent = counsellor || 'Assigned Counsellor';
+			document.getElementById('modalEnquiryDate').textContent = date || 'N/A';
+			document.getElementById('timelineCreatedDate').textContent = 'Created: ' + (date || 'Recently');
+
+			// Status Badge
+			const statusContainer = document.getElementById('modalStatusContainer');
+			if (status === 'OPEN') {
+				statusContainer.innerHTML = '<span class="cp-status-badge cp-status-open"><span class="cp-status-dot"></span> OPEN</span>';
+			} else if (status === 'ENROLLED') {
+				statusContainer.innerHTML = '<span class="cp-status-badge cp-status-enrolled"><span class="cp-status-dot"></span> ENROLLED</span>';
+			} else if (status === 'LOST') {
+				statusContainer.innerHTML = '<span class="cp-status-badge cp-status-lost"><span class="cp-status-dot"></span> LOST</span>';
+			} else {
+				statusContainer.innerHTML = '<span class="badge bg-light text-dark">' + (status || 'UNKNOWN') + '</span>';
+			}
+
+			// Links
+			document.getElementById('modalCallBtn').href = 'tel:' + phone;
+			document.getElementById('modalEditBtn').href = '/editEnq?enqId=' + id;
+
+			const modal = new bootstrap.Modal(document.getElementById('studentDetailsModal'));
+			modal.show();
+		}
+
+		// Confirm Delete Modal
+		function confirmDelete(btn) {
+			const id = btn.getAttribute('data-id');
+			const name = btn.getAttribute('data-name');
+			document.getElementById('deleteStudentMessage').textContent = 'Are you sure you want to delete the enquiry for "' + name + '"?';
+			document.getElementById('confirmDeleteLink').href = '/deleteEnq?enqId=' + id;
+
+			const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+			modal.show();
+		}
+	</script>
+</body>
+
+</html>

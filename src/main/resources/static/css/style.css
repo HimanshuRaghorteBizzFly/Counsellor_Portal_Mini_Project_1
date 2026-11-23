@@ -1,0 +1,1040 @@
+/* ===================================================================
+   COUNSELLOR PORTAL - MODERN UI/UX DESIGN SYSTEM
+   Professional Admission & Counselling Management System
+   =================================================================== */
+
+:root {
+  /* Primary Brand (Modern Blue/Indigo) */
+  --cp-primary: #4f46e5;
+  --cp-primary-hover: #4338ca;
+  --cp-primary-active: #3730a3;
+  --cp-primary-light: #eef2ff;
+  --cp-primary-border: #c7d2fe;
+  --cp-primary-rgb: 79, 70, 229;
+
+  /* Secondary & Accents */
+  --cp-secondary: #0ea5e9;
+  --cp-secondary-hover: #0284c7;
+  --cp-secondary-light: #f0f9ff;
+
+  /* Status Colors (Soft, Accessible) */
+  --cp-success: #10b981;
+  --cp-success-hover: #059669;
+  --cp-success-light: #ecfdf5;
+  --cp-success-border: #a7f3d0;
+  --cp-success-text: #047857;
+
+  --cp-warning: #f59e0b;
+  --cp-warning-hover: #d97706;
+  --cp-warning-light: #fffbeb;
+  --cp-warning-border: #fde68a;
+  --cp-warning-text: #b45309;
+
+  --cp-danger: #ef4444;
+  --cp-danger-hover: #dc2626;
+  --cp-danger-light: #fef2f2;
+  --cp-danger-border: #fecaca;
+  --cp-danger-text: #b91c1c;
+
+  --cp-purple: #7c3aed;
+  --cp-purple-light: #faf5ff;
+  --cp-purple-border: #ede9fe;
+  --cp-purple-text: #6d28d9;
+
+  /* Neutrals */
+  --cp-dark: #0f172a;
+  --cp-slate: #1e293b;
+  --cp-muted: #64748b;
+  --cp-border: #e2e8f0;
+  --cp-border-input: #cbd5e1;
+  --cp-border-subtle: #f1f5f9;
+  --cp-bg: #f8fafc;
+  --cp-card-bg: #ffffff;
+
+  /* Shadows (Minimal, Professional) */
+  --cp-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --cp-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --cp-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --cp-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+
+  /* Radius */
+  --cp-radius-xs: 6px;
+  --cp-radius-sm: 8px;
+  --cp-radius-md: 10px;
+  --cp-radius-lg: 12px;
+  --cp-radius-xl: 16px;
+  --cp-radius-pill: 9999px;
+
+  /* Typography */
+  --cp-font: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ===================================================================
+   Global Resets & Base
+   =================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--cp-font);
+  background-color: var(--cp-bg);
+  color: var(--cp-slate);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===================================================================
+   Navigation Bar (Sticky, Clean, Accessible)
+   =================================================================== */
+.cp-navbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--cp-border);
+  box-shadow: var(--cp-shadow-xs);
+  padding: 0.65rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.cp-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--cp-slate);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.cp-navbar .navbar-brand:hover {
+  opacity: 0.9;
+}
+
+.cp-navbar .brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--cp-radius-sm);
+  background: var(--cp-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.cp-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--cp-muted);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--cp-radius-sm);
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.cp-nav-link:hover {
+  color: var(--cp-primary);
+  background-color: var(--cp-primary-light);
+}
+
+.cp-nav-link.active {
+  color: var(--cp-primary);
+  background-color: var(--cp-primary-light);
+  font-weight: 600;
+}
+
+.cp-nav-link i {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.cp-nav-logout {
+  color: var(--cp-muted);
+}
+
+.cp-nav-logout:hover {
+  color: var(--cp-danger);
+  background-color: var(--cp-danger-light);
+}
+
+/* ===================================================================
+   Auth Layout (Login & Register)
+   =================================================================== */
+.cp-auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  background-color: var(--cp-bg);
+}
+
+.cp-auth-card {
+  background: #ffffff;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-xl);
+  box-shadow: var(--cp-shadow-md);
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+}
+
+.cp-auth-header {
+  padding: 2rem 2rem 1rem;
+  text-align: center;
+}
+
+.cp-auth-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--cp-radius-md);
+  background: var(--cp-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.cp-auth-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--cp-slate);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.cp-auth-subtitle {
+  color: var(--cp-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.cp-auth-body {
+  padding: 1.25rem 2rem 2rem;
+}
+
+.cp-auth-footer {
+  padding: 1.15rem 2rem;
+  background-color: #f8fafc;
+  border-top: 1px solid var(--cp-border);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--cp-muted);
+}
+
+.cp-auth-footer a {
+  color: var(--cp-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cp-auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===================================================================
+   Cards & Layout Components
+   =================================================================== */
+.cp-card {
+  background: #ffffff;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-lg);
+  box-shadow: var(--cp-shadow-xs);
+  transition: all 0.2s ease;
+}
+
+.cp-card-hover:hover {
+  box-shadow: var(--cp-shadow-md);
+  border-color: #cbd5e1;
+}
+
+.cp-card-header {
+  padding: 1.15rem 1.4rem;
+  border-bottom: 1px solid var(--cp-border);
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: var(--cp-radius-lg);
+  border-top-right-radius: var(--cp-radius-lg);
+}
+
+.cp-card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--cp-slate);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cp-card-body {
+  padding: 1.4rem;
+}
+
+/* Page Header Hero */
+.cp-page-header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cp-page-title {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--cp-slate);
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cp-page-subtitle {
+  color: var(--cp-muted);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+/* Record Count Badge */
+.cp-record-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--cp-primary);
+  background-color: var(--cp-primary-light);
+  border: 1px solid var(--cp-primary-border);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--cp-radius-pill);
+  vertical-align: middle;
+}
+
+.cp-record-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--cp-primary);
+  display: inline-block;
+}
+
+/* ===================================================================
+   Dashboard KPI Cards (6 Cards)
+   =================================================================== */
+.cp-stat-card {
+  background: #ffffff;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-lg);
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--cp-shadow-xs);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.cp-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cp-shadow-md);
+}
+
+.cp-stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.cp-stat-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cp-muted);
+}
+
+.cp-stat-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cp-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.cp-stat-value {
+  font-size: 1.95rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--cp-slate);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.cp-stat-footer {
+  font-size: 0.775rem;
+  color: var(--cp-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cp-stat-primary {
+  border-left: 4px solid var(--cp-primary);
+}
+.cp-stat-primary .cp-stat-icon-wrapper {
+  background-color: var(--cp-primary-light);
+  color: var(--cp-primary);
+}
+
+.cp-stat-warning {
+  border-left: 4px solid var(--cp-warning);
+}
+.cp-stat-warning .cp-stat-icon-wrapper {
+  background-color: var(--cp-warning-light);
+  color: var(--cp-warning-hover);
+}
+
+.cp-stat-success {
+  border-left: 4px solid var(--cp-success);
+}
+.cp-stat-success .cp-stat-icon-wrapper {
+  background-color: var(--cp-success-light);
+  color: var(--cp-success);
+}
+
+.cp-stat-danger {
+  border-left: 4px solid var(--cp-danger);
+}
+.cp-stat-danger .cp-stat-icon-wrapper {
+  background-color: var(--cp-danger-light);
+  color: var(--cp-danger);
+}
+
+.cp-stat-purple {
+  border-left: 4px solid var(--cp-purple);
+}
+.cp-stat-purple .cp-stat-icon-wrapper {
+  background-color: var(--cp-purple-light);
+  color: var(--cp-purple);
+}
+
+.cp-stat-secondary {
+  border-left: 4px solid var(--cp-secondary);
+}
+.cp-stat-secondary .cp-stat-icon-wrapper {
+  background-color: var(--cp-secondary-light);
+  color: var(--cp-secondary);
+}
+
+/* ===================================================================
+   Admission Pipeline Funnel Visualizer
+   =================================================================== */
+.cp-pipeline-wrapper {
+  background-color: #ffffff;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-lg);
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--cp-shadow-xs);
+}
+
+.cp-pipeline-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.cp-pipeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 110px;
+  flex: 1;
+  position: relative;
+}
+
+.cp-pipeline-node {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--cp-primary-light);
+  color: var(--cp-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--cp-primary-border);
+  z-index: 2;
+}
+
+.cp-pipeline-step.completed .cp-pipeline-node {
+  background: var(--cp-success);
+  color: #ffffff;
+  box-shadow: 0 0 0 2px var(--cp-success-border);
+}
+
+.cp-pipeline-title {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--cp-slate);
+  margin-bottom: 0.15rem;
+}
+
+.cp-pipeline-desc {
+  font-size: 0.7rem;
+  color: var(--cp-muted);
+}
+
+.cp-pipeline-arrow {
+  color: var(--cp-muted);
+  font-size: 0.85rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ===================================================================
+   Form Controls & Filter Inputs
+   =================================================================== */
+.cp-form-label,
+.cp-filter-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cp-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cp-input-icon {
+  position: absolute;
+  left: 0.95rem;
+  color: var(--cp-muted);
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.cp-input-group .form-control,
+.cp-input-group .form-select {
+  padding-left: 2.65rem;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid var(--cp-border-input);
+  border-radius: var(--cp-radius-sm);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.9rem;
+  color: var(--cp-slate);
+  background-color: #ffffff;
+  height: 42px;
+  line-height: 1.5;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--cp-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* ===================================================================
+   Buttons (Polished, SaaS Standard, Consistent)
+   =================================================================== */
+.btn {
+  font-family: var(--cp-font);
+  font-weight: 600;
+  font-size: 0.9rem;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 1.25rem;
+  border-radius: var(--cp-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: var(--cp-primary);
+  color: #ffffff;
+  border: 1px solid var(--cp-primary);
+  box-shadow: var(--cp-shadow-xs);
+}
+
+.btn-primary:hover {
+  background-color: var(--cp-primary-hover);
+  border-color: var(--cp-primary-hover);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+}
+
+.btn-primary:active {
+  background-color: var(--cp-primary-active);
+  border-color: var(--cp-primary-active);
+}
+
+.btn-primary:disabled {
+  background-color: #94a3b8;
+  border-color: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* Secondary Button / Reset Button */
+.btn-secondary,
+.cp-btn-reset {
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid var(--cp-border-input);
+  box-shadow: var(--cp-shadow-xs);
+}
+
+.btn-secondary:hover,
+.cp-btn-reset:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: var(--cp-dark);
+}
+
+.cp-btn-reset {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  font-size: 1.05rem;
+}
+
+/* Edit Button (Compact Outlined) */
+.cp-btn-edit {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cp-primary);
+  background-color: #ffffff;
+  border: 1px solid var(--cp-primary-border);
+  border-radius: var(--cp-radius-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.cp-btn-edit:hover {
+  background-color: var(--cp-primary-light);
+  color: var(--cp-primary-hover);
+  border-color: #a5b4fc;
+}
+
+/* View Button (Compact Outlined) */
+.cp-btn-view {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  background-color: #ffffff;
+  border: 1px solid var(--cp-border-input);
+  border-radius: var(--cp-radius-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.cp-btn-view:hover {
+  background-color: #f8fafc;
+  color: var(--cp-dark);
+  border-color: #94a3b8;
+}
+
+/* Delete Button (Compact Outlined Red) */
+.cp-btn-delete {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cp-danger);
+  background-color: #ffffff;
+  border: 1px solid var(--cp-danger-border);
+  border-radius: var(--cp-radius-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.cp-btn-delete:hover {
+  background-color: var(--cp-danger-light);
+  color: var(--cp-danger-hover);
+  border-color: #fca5a5;
+}
+
+.btn-outline-secondary {
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid var(--cp-border-input);
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8fafc;
+  color: var(--cp-slate);
+  border-color: #94a3b8;
+}
+
+.btn-sm {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 0.85rem;
+  font-size: 0.825rem;
+  border-radius: var(--cp-radius-xs);
+}
+
+.btn-lg {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+}
+
+/* ===================================================================
+   Filter Bar (Clean, Compact, Aligned)
+   =================================================================== */
+.cp-filter-bar {
+  background-color: #ffffff;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-lg);
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--cp-shadow-xs);
+}
+
+/* ===================================================================
+   Modern Table & Badges (Clean, SaaS Style)
+   =================================================================== */
+.cp-table-card {
+  background: #ffffff;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--cp-shadow-xs);
+}
+
+.cp-table {
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.cp-table thead th {
+  background-color: #f8fafc;
+  color: var(--cp-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--cp-border);
+  white-space: nowrap;
+}
+
+.cp-table tbody td {
+  padding: 0.95rem 1.25rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--cp-border-subtle);
+  color: var(--cp-slate);
+  font-size: 0.9rem;
+}
+
+.cp-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cp-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.cp-table tbody tr:hover {
+  background-color: #fbfcfd;
+}
+
+/* Status Badges */
+.cp-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--cp-radius-pill);
+  font-size: 0.775rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.cp-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.cp-status-open {
+  background-color: var(--cp-warning-light);
+  color: var(--cp-warning-text);
+  border: 1px solid var(--cp-warning-border);
+}
+.cp-status-open .cp-status-dot {
+  background-color: var(--cp-warning);
+}
+
+.cp-status-enrolled {
+  background-color: var(--cp-success-light);
+  color: var(--cp-success-text);
+  border: 1px solid var(--cp-success-border);
+}
+.cp-status-enrolled .cp-status-dot {
+  background-color: var(--cp-success);
+}
+
+.cp-status-lost {
+  background-color: var(--cp-danger-light);
+  color: var(--cp-danger-text);
+  border: 1px solid var(--cp-danger-border);
+}
+.cp-status-lost .cp-status-dot {
+  background-color: var(--cp-danger);
+}
+
+/* Training Mode Badges */
+.cp-badge-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--cp-radius-xs);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.cp-mode-online {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+}
+
+.cp-mode-classroom {
+  background-color: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #ede9fe;
+}
+
+/* ===================================================================
+   Timeline & Modal Components
+   =================================================================== */
+.cp-timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.cp-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background-color: var(--cp-border);
+}
+
+.cp-timeline-item {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.cp-timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.cp-timeline-dot {
+  position: absolute;
+  left: -1.5rem;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--cp-primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--cp-primary-border);
+}
+
+/* ===================================================================
+   Alert Banners
+   =================================================================== */
+.cp-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.95rem 1.25rem;
+  border-radius: var(--cp-radius-md);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.cp-alert-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.cp-alert-success {
+  background-color: var(--cp-success-light);
+  border-color: var(--cp-success-border);
+  color: var(--cp-success-text);
+}
+
+.cp-alert-danger {
+  background-color: var(--cp-danger-light);
+  border-color: var(--cp-danger-border);
+  color: var(--cp-danger-text);
+}
+
+.cp-alert p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===================================================================
+   Empty State
+   =================================================================== */
+.cp-empty-state {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+}
+
+.cp-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--cp-primary-light);
+  color: var(--cp-primary);
+  font-size: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.cp-empty-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--cp-slate);
+  margin-bottom: 0.35rem;
+}
+
+.cp-empty-text {
+  color: var(--cp-muted);
+  font-size: 0.875rem;
+  max-width: 380px;
+  margin: 0 auto 1.25rem;
+}
+
+/* ===================================================================
+   Footer
+   =================================================================== */
+.cp-footer {
+  margin-top: auto;
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--cp-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--cp-border);
+}
+
+/* ===================================================================
+   Responsive Adjustments
+   =================================================================== */
+@media (max-width: 768px) {
+  .cp-auth-card {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+  .cp-auth-body {
+    padding: 1rem 0;
+  }
+  .cp-auth-header {
+    padding: 1rem 0;
+  }
+  .cp-card-body {
+    padding: 1.15rem;
+  }
+  .cp-page-title {
+    font-size: 1.35rem;
+  }
+  .cp-filter-bar {
+    padding: 1rem;
+  }
+}
