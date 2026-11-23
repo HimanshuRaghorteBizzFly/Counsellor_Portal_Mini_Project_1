@@ -1,0 +1,65 @@
+services:
+  # Spring Boot Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: counsellor-portal-app:latest
+    container_name: counsellor-app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      DB_URL: jdbc:mysql://db:3306/counsellor_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USERNAME: ${MYSQL_USER:-counsellor_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-counsellor_password}
+      DB_POOL_MAX_SIZE: 10
+      DB_POOL_MIN_IDLE: 2
+      CORS_ALLOWED_ORIGINS: "http://localhost:8080,http://127.0.0.1:8080,http://localhost:3000"
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - counsellor-network
+
+  # MySQL Database Service
+  db:
+    image: mysql:8.0-debian
+    container_name: counsellor-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_secure_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-counsellor_db}
+      MYSQL_USER: ${MYSQL_USER:-counsellor_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-counsellor_password}
+    ports:
+      # Bound only to localhost 127.0.0.1 to avoid public exposure
+      - "127.0.0.1:${MYSQL_LOCAL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - counsellor-network
+
+volumes:
+  mysql_data:
+    name: counsellor_mysql_data
+
+networks:
+  counsellor-network:
+    name: counsellor-network
+    driver: bridge
