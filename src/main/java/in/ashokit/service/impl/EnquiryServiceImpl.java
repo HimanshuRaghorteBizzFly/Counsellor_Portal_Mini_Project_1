@@ -34,17 +34,29 @@ public class EnquiryServiceImpl implements EnquiryService {
 	public boolean insertEnquiry(EnquiryDto enquiryDto, Integer counsellorId) {
 
 		Counsellor counsellor = counsellorRepo.findById(counsellorId).orElseThrow();
-
 		Course course = courseRepo.findById(enquiryDto.getCourseId()).orElseThrow();
 
-		Enquiry enq = new Enquiry();
-
-		// copy dto obj data into entity obj
-		BeanUtils.copyProperties(enquiryDto, enq);
-
-		// association
-		enq.setCourse(course);
-		enq.setCounsellor(counsellor);
+		Enquiry enq;
+		if (enquiryDto.getEnqId() != null) {
+			Optional<Enquiry> existingOpt = enqRepo.findById(enquiryDto.getEnqId());
+			if (existingOpt.isEmpty()) {
+				return false;
+			}
+			enq = existingOpt.get();
+			if (enq.getCounsellor() != null && !enq.getCounsellor().getCounsellorId().equals(counsellorId)) {
+				return false;
+			}
+			enq.setStuName(enquiryDto.getStuName());
+			enq.setStuPhno(enquiryDto.getStuPhno());
+			enq.setClassMode(enquiryDto.getClassMode());
+			enq.setEnqStatus(enquiryDto.getEnqStatus());
+			enq.setCourse(course);
+		} else {
+			enq = new Enquiry();
+			BeanUtils.copyProperties(enquiryDto, enq);
+			enq.setCourse(course);
+			enq.setCounsellor(counsellor);
+		}
 
 		Enquiry savedEnq = enqRepo.save(enq);
 
@@ -71,8 +83,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 		}
 
 		if (filterDto.getCourseId() != null && filterDto.getCourseId() > 0) {
-			Course course = courseRepo.findById(filterDto.getCourseId()).orElseThrow();
-			enq.setCourse(course);
+			courseRepo.findById(filterDto.getCourseId()).ifPresent(enq::setCourse);
 		}
 
 		if (filterDto.getEnqStatus() != null && !"".equals(filterDto.getEnqStatus())) {

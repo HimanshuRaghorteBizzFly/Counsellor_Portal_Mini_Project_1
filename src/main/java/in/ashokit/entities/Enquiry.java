@@ -37,6 +37,7 @@ public class Enquiry {
 	private Counsellor counsellor;
 
 	@CreationTimestamp
+	@jakarta.persistence.Column(updatable = false)
 	private LocalDateTime createdAt;
 
 	@UpdateTimestamp

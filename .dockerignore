@@ -1,20 +1,30 @@
+# Version control
 .git
 .gitignore
 .gitattributes
 .github
-target/
-!target/*.jar
-*.log
+
+# Environment secrets and credentials
 .env
 .env.*
-.dockerignore
-Dockerfile*
-docker-compose*.yml
-DEPLOYMENT.md
-README.md
+*.pem
+*.key
+
+# Build outputs and logs
+target/
+*.log
+
+# IDE & Editor configuration
 .idea/
 .vscode/
 *.iml
 *.iws
 *.ipr
+.settings/
+.project
+.classpath
+
+# Documentation
+DEPLOYMENT.md
+README.md
 HELP.md

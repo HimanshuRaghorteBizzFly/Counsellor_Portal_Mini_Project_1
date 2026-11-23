@@ -30,6 +30,7 @@ public class Counsellor {
 	private Long phno;
 
 	@CreationTimestamp
+	@jakarta.persistence.Column(updatable = false)
 	private LocalDateTime createdAt;
 
 	@UpdateTimestamp

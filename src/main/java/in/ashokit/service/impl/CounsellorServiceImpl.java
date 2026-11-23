@@ -30,6 +30,10 @@ public class CounsellorServiceImpl implements CounsellorService {
 
 	@Override
 	public boolean register(Counsellor counsellor) {
+		Counsellor existing = counsellorRepo.findByEmail(counsellor.getEmail());
+		if (existing != null) {
+			return false;
+		}
 
 		Counsellor savedCounsellor = counsellorRepo.save(counsellor);
 

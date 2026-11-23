@@ -9,4 +9,7 @@ public interface CounsellorRepo extends JpaRepository<Counsellor, Integer> {
 	// select * from counsellor_tbl where email=? and pwd=?
 	public Counsellor findByEmailAndPwd(String email, String pwd);
 
+	// select * from counsellor_tbl where email=?
+	public Counsellor findByEmail(String email);
+
 }

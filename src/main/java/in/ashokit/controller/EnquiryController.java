@@ -45,17 +45,27 @@ public class EnquiryController {
 		if (session == null || session.getAttribute("CID") == null) {
 			return "redirect:/";
 		}
+		Integer counsellorId = (Integer) session.getAttribute("CID");
 
-		Enquiry enquiry = enqService.getEnquiry(enqId);
+		try {
+			Enquiry enquiry = enqService.getEnquiry(enqId);
+			if (enquiry == null || enquiry.getCounsellor() == null || !enquiry.getCounsellor().getCounsellorId().equals(counsellorId)) {
+				return "redirect:/view-enquiries";
+			}
 
-		EnquiryDto enqDtoObj = new EnquiryDto();
-		BeanUtils.copyProperties(enquiry, enqDtoObj);
-		enqDtoObj.setCourseId(enquiry.getCourse().getCourseId());
+			EnquiryDto enqDtoObj = new EnquiryDto();
+			BeanUtils.copyProperties(enquiry, enqDtoObj);
+			if (enquiry.getCourse() != null) {
+				enqDtoObj.setCourseId(enquiry.getCourse().getCourseId());
+			}
 
-		model.addAttribute("enqDto", enqDtoObj);
-		model.addAttribute("courses", enqService.getCourses());
+			model.addAttribute("enqDto", enqDtoObj);
+			model.addAttribute("courses", enqService.getCourses());
 
-		return "add-enq";
+			return "add-enq";
+		} catch (Exception e) {
+			return "redirect:/view-enquiries";
+		}
 	}
 
 	@PostMapping("/enquiry")
@@ -67,12 +77,13 @@ public class EnquiryController {
 		}
 		Integer counsellorId = (Integer) session.getAttribute("CID");
 
+		boolean isUpdate = enqDto.getEnqId() != null;
 		boolean isSaved = enqService.insertEnquiry(enqDto, counsellorId);
 
 		if (isSaved) {
-			model.addAttribute("smsg", "Enquiry Added");
+			model.addAttribute("smsg", isUpdate ? "Enquiry Updated Successfully" : "Enquiry Added Successfully");
 		} else {
-			model.addAttribute("emsg", "Failed to add Enquiry");
+			model.addAttribute("emsg", isUpdate ? "Failed to update Enquiry" : "Failed to add Enquiry");
 		}
 		model.addAttribute("courses", enqService.getCourses());
 		return "add-enq";

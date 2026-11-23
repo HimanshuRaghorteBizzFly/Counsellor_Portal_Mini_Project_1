@@ -66,8 +66,9 @@ public class CounsellorController {
 
 		if (register) {
 			model.addAttribute("smsg", "Registration Success");
+			model.addAttribute("counsellor", new Counsellor());
 		} else {
-			model.addAttribute("emsg", "Registration failed");
+			model.addAttribute("emsg", "Registration failed: Email is already registered or invalid");
 		}
 
 		return "register";
@@ -95,7 +96,9 @@ public class CounsellorController {
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
-		session.invalidate();
+		if (session != null) {
+			session.invalidate();
+		}
 		return "redirect:/";
 	}
 
